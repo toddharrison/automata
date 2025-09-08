@@ -5,6 +5,7 @@ import com.eharrison.automata.game.tictactoe.bot.TTTBot;
 import lombok.val;
 
 import java.util.List;
+import java.util.UUID;
 
 public class TTTGame implements Game<TTTConfig, TTTState, TTTView, TTTAction, TTTResult, TTTBot> {
     @Override
@@ -32,7 +33,7 @@ public class TTTGame implements Game<TTTConfig, TTTState, TTTView, TTTAction, TT
 
             // Update board
             val newBoard = state.board().clone();
-            newBoard[action.row()][action.col()] = state.currentBot();
+            newBoard[action.row()][action.col()] = state.currentBot().getId();
             state = state.next(newBoard, action);
 
             // Check for win
@@ -57,14 +58,14 @@ public class TTTGame implements Game<TTTConfig, TTTState, TTTView, TTTAction, TT
         return state.round() > 8;
     }
 
-    private boolean isWin(final TTTBot[][] board, final TTTBot bot) {
+    private boolean isWin(final UUID[][] board, final TTTBot bot) {
         for (int i = 0; i < 3; i++) {
-            if ((board[i][0] == bot && board[i][1] == bot && board[i][2] == bot) || // Row
-                    (board[0][i] == bot && board[1][i] == bot && board[2][i] == bot)) { // Column
+            if ((bot.getId().equals(board[i][0]) && bot.getId().equals(board[i][1]) && bot.getId().equals(board[i][2])) || // Row
+                    (bot.getId().equals(board[0][i]) && bot.getId().equals(board[1][i]) && bot.getId().equals(board[2][i]))) { // Column
                 return true;
             }
         }
-        return (board[0][0] == bot && board[1][1] == bot && board[2][2] == bot) || // Diagonal
-                (board[0][2] == bot && board[1][1] == bot && board[2][0] == bot); // Anti-diagonal
+        return (bot.getId().equals(board[0][0]) && bot.getId().equals(board[1][1]) && bot.getId().equals(board[2][2])) || // Diagonal
+                (bot.getId().equals(board[0][2]) && bot.getId().equals(board[1][1]) && bot.getId().equals(board[2][0])); // Anti-diagonal
     }
 }

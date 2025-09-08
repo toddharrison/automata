@@ -5,8 +5,16 @@ import com.eharrison.automata.game.tictactoe.TTTView;
 import lombok.val;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class RandomMoveBot implements TTTBot {
+    private final UUID id = UUID.randomUUID();
+
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
     @Override
     public String getName() {
         return "Random Tic-Tac-Toe Bot";

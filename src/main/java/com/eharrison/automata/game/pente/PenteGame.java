@@ -5,6 +5,7 @@ import com.eharrison.automata.game.pente.bot.PenteBot;
 import lombok.val;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PenteGame implements Game<PenteConfig, PenteState, PenteView, PenteAction, PenteResult, PenteBot> {
     private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {1, 1}, {1, -1}, {0, -1}, {-1, 0}, {-1, -1}, {-1, 1}};
@@ -23,30 +24,32 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         val bot2 = bots.get(1);
         val bot1Starts = Math.random() < 0.5;
 
-        var state = new PenteState(bot1, bot2, new PenteBot[19][19], bot1Starts);
+        var state = new PenteState(bot1, bot2, new UUID[config.size()][config.size()], bot1Starts);
 
         // TODO Games to play
         while (!isGameOver(state)) {
             val action = state.currentBot().act(state.viewFor(state.currentBot()));
             if (!isValidAction(action, state)) {
-                return new PenteResult(state.round(), state.currentBot() == bot1 ? bot2 : bot1); // Invalid action, current bot loses
+                return new PenteResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1); // Invalid action, current bot loses
             }
 
             // Update board
             val bot = state.currentBot();
             val newBoard = state.board().clone();
-            newBoard[action.row()][action.col()] = bot;
+            newBoard[action.row()][action.col()] = bot.getId();
             val captures = checkForCaptures(newBoard, bot, action);
             state = state.next(newBoard, captures, action);
 
+//            System.out.println(state.display());
+
             // Check for win
             if (isWin(config, state, bot)) {
-                return new PenteResult(state.round(), bot);
+                return new PenteResult(state.round(), state, bot);
             }
         }
 
         // Draw
-        return new PenteResult(state.round(), null);
+        return new PenteResult(state.round(), state, null);
     }
 
     private boolean isValidAction(final PenteAction action, final PenteState state) {
@@ -63,7 +66,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         int size = board.length;
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                if (board[r][c] == bot) {
+                if (bot.getId().equals(board[r][c])) {
                     // Check right
                     if (c <= size - 5 && checkDirection(board, bot, r, c, 0, 1)) return true;
                     // Check down
@@ -82,16 +85,16 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         else return bot == state.bot2() && state.bot2Captures() >= capturesToWin;
     }
 
-    private boolean checkDirection(final PenteBot[][] board, final PenteBot bot, final int startRow, final int startCol, final int dRow, final int dCol) {
+    private boolean checkDirection(final UUID[][] board, final PenteBot bot, final int startRow, final int startCol, final int dRow, final int dCol) {
         for (int i = 0; i < 5; i++) {
-            if (board[startRow + i * dRow][startCol + i * dCol] != bot) {
+            if (!bot.getId().equals(board[startRow + i * dRow][startCol + i * dCol])) {
                 return false;
             }
         }
         return true;
     }
 
-    private int checkForCaptures(final PenteBot[][] board, final PenteBot bot, final PenteAction action) {
+    private int checkForCaptures(final UUID[][] board, final PenteBot bot, final PenteAction action) {
         var captures = 0;
 
         val row = action.row();
@@ -102,8 +105,8 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
             int r2 = row + 2 * dir[0], c2 = col + 2 * dir[1];
             int r3 = row + 3 * dir[0], c3 = col + 3 * dir[1];
             if (inBounds(board, r1, c1) && inBounds(board, r2, c2) && inBounds(board, r3, c3)) {
-                if (isOpponent(board, bot, r1, c1) && isOpponent(board, bot, r2, c2) && board[r3][c3] == bot) {
-                    // Capture opponent pieces
+                if (isOpponent(board, bot, r1, c1) && isOpponent(board, bot, r2, c2) && bot.getId().equals(board[r3][c3])) {
+                    // Capture opponentId pieces
                     board[r1][c1] = null;
                     board[r2][c2] = null;
                     captures += 1;
@@ -114,11 +117,11 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         return captures;
     }
 
-    private boolean inBounds(final PenteBot[][] board, final int row, final int col) {
+    private boolean inBounds(final UUID[][] board, final int row, final int col) {
         return row >= 0 && row < board.length && col >= 0 && col < board[row].length;
     }
 
-    private boolean isOpponent(final PenteBot[][] board, final PenteBot bot, final int row, final int col) {
-        return board[row][col] != null && board[row][col] != bot;
+    private boolean isOpponent(final UUID[][] board, final PenteBot bot, final int row, final int col) {
+        return board[row][col] != null && !bot.getId().equals(board[row][col]);
     }
 }

@@ -5,5 +5,6 @@ import com.eharrison.automata.game.pente.bot.PenteBot;
 
 public record PenteResult(
         int rounds,
+        PenteState state,
         PenteBot winner
 ) implements Result {}

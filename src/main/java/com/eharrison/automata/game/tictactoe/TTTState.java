@@ -1,0 +1,47 @@
+package com.eharrison.automata.game.tictactoe;
+
+import com.eharrison.automata.game.State;
+import com.eharrison.automata.game.tictactoe.bot.TTTBot;
+import lombok.val;
+
+public record TTTState(
+        int round,
+        TTTBot bot1,
+        TTTBot bot2,
+        TTTBot[][] board,
+        TTTAction lastAction,
+        TTTBot currentBot
+) implements State<TTTBot> {
+    public TTTState(final TTTBot bot1, final TTTBot bot2, final boolean bot1Starts) {
+        this(0, bot1, bot2, new TTTBot[3][3], null, bot1Starts ? bot1 : bot2);
+    }
+
+    @Override
+    public TTTView viewFor(final TTTBot bot) {
+        return new TTTView(round, board.clone(), lastAction);
+    }
+
+    public TTTState next(final TTTBot[][] newBoard, final TTTAction lastAction) {
+        return new TTTState(round + 1, bot1, bot2, newBoard, lastAction, currentBot == bot1 ? bot2 : bot1);
+    }
+
+    public String display() {
+        val sb = new StringBuilder();
+        for (val cells : board) {
+            for (int c = 0; c < cells.length; c++) {
+                if (cells[c] == null) {
+                    sb.append(".");
+                } else if (cells[c] == bot1) {
+                    sb.append("X");
+                } else {
+                    sb.append("O");
+                }
+                if (c < cells.length - 1) {
+                    sb.append(" ");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+}

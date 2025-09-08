@@ -60,12 +60,12 @@ public class TTTGame implements Game<TTTConfig, TTTState, TTTView, TTTAction, TT
 
     private boolean isWin(final UUID[][] board, final TTTBot bot) {
         for (int i = 0; i < 3; i++) {
-            if ((bot.getId().equals(board[i][0]) && bot.getId().equals(board[i][1]) && bot.getId().equals(board[i][2])) || // Row
-                    (bot.getId().equals(board[0][i]) && bot.getId().equals(board[1][i]) && bot.getId().equals(board[2][i]))) { // Column
+            if ((bot.getId() == board[i][0] && bot.getId() == board[i][1] && bot.getId() == board[i][2]) || // Row
+                    (bot.getId() == board[0][i] && bot.getId() == board[1][i] && bot.getId() == board[2][i])) { // Column
                 return true;
             }
         }
-        return (bot.getId().equals(board[0][0]) && bot.getId().equals(board[1][1]) && bot.getId().equals(board[2][2])) || // Diagonal
-                (bot.getId().equals(board[0][2]) && bot.getId().equals(board[1][1]) && bot.getId().equals(board[2][0])); // Anti-diagonal
+        return (bot.getId() == board[0][0] && bot.getId() == board[1][1] && bot.getId() == board[2][2]) || // Diagonal
+                (bot.getId() == board[0][2] && bot.getId() == board[1][1] && bot.getId() == board[2][0]); // Anti-diagonal
     }
 }

@@ -146,11 +146,11 @@ public class MinMaxPenteBot implements PenteBot {
         };
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                if (playerId.equals(board[r][c])) {
+                if (playerId == board[r][c]) {
                     for (int[] d : directions) {
                         int count = 1;
                         int rr = r + d[0], cc = c + d[1];
-                        while (rr >= 0 && rr < size && cc >= 0 && cc < size && playerId.equals(board[rr][cc])) {
+                        while (rr >= 0 && rr < size && cc >= 0 && cc < size && playerId == board[rr][cc]) {
                             count++;
                             if (count >= 5) return true;
                             rr += d[0]; cc += d[1];

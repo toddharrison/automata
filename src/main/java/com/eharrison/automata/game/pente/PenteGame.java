@@ -66,7 +66,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         int size = board.length;
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                if (bot.getId().equals(board[r][c])) {
+                if (bot.getId() == board[r][c]) {
                     // Check right
                     if (c <= size - 5 && checkDirection(board, bot, r, c, 0, 1)) return true;
                     // Check down
@@ -87,7 +87,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
 
     private boolean checkDirection(final UUID[][] board, final PenteBot bot, final int startRow, final int startCol, final int dRow, final int dCol) {
         for (int i = 0; i < 5; i++) {
-            if (!bot.getId().equals(board[startRow + i * dRow][startCol + i * dCol])) {
+            if (bot.getId() != board[startRow + i * dRow][startCol + i * dCol]) {
                 return false;
             }
         }
@@ -105,7 +105,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
             int r2 = row + 2 * dir[0], c2 = col + 2 * dir[1];
             int r3 = row + 3 * dir[0], c3 = col + 3 * dir[1];
             if (inBounds(board, r1, c1) && inBounds(board, r2, c2) && inBounds(board, r3, c3)) {
-                if (isOpponent(board, bot, r1, c1) && isOpponent(board, bot, r2, c2) && bot.getId().equals(board[r3][c3])) {
+                if (isOpponent(board, bot, r1, c1) && isOpponent(board, bot, r2, c2) && bot.getId() == board[r3][c3]) {
                     // Capture opponentId pieces
                     board[r1][c1] = null;
                     board[r2][c2] = null;
@@ -122,6 +122,6 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
     }
 
     private boolean isOpponent(final UUID[][] board, final PenteBot bot, final int row, final int col) {
-        return board[row][col] != null && !bot.getId().equals(board[row][col]);
+        return board[row][col] != null && bot.getId() != board[row][col];
     }
 }

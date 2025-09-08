@@ -33,7 +33,7 @@ public record TTTState(
             for (int c = 0; c < cells.length; c++) {
                 if (cells[c] == null) {
                     sb.append(".");
-                } else if (bot1.getId().equals(cells[c])) {
+                } else if (bot1.getId() == cells[c]) {
                     sb.append("X");
                 } else {
                     sb.append("O");

@@ -24,6 +24,14 @@ public class MinMaxPenteBot implements PenteBot {
 
     @Override
     public PenteAction act(final PenteView view) {
+        if (view.round() == 0) {
+            return makeRequiredFirstMoveInCenter(view);
+        } else {
+            return makeMove(view);
+        }
+    }
+
+    private PenteAction makeMove(final PenteView view) {
         val board = view.board();
         val opponentId = view.opponentId();
         val size = board.length;

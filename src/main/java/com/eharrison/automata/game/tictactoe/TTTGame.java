@@ -22,6 +22,9 @@ public class TTTGame implements Game<TTTConfig, TTTState, TTTView, TTTAction, TT
         val bot2 = bots.get(1);
         val bot1Starts = Math.random() < 0.5;
 
+        bot1.init();
+        bot2.init();
+
         var state = new TTTState(bot1, bot2, bot1Starts);
 
         // TODO Games to play

@@ -24,13 +24,18 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         val bot2 = bots.get(1);
         val bot1Starts = Math.random() < 0.5;
 
+        bot1.init();
+        bot2.init();
+
         var state = new PenteState(bot1, bot2, new UUID[config.size()][config.size()], bot1Starts);
 
         // TODO Games to play
         while (!isGameOver(state)) {
             val action = state.currentBot().act(state.viewFor(state.currentBot()));
             if (!isValidAction(action, state)) {
-                return new PenteResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1); // Invalid action, current bot loses
+                // Invalid action, current bot loses
+                // TODO indicate forfeit
+                return new PenteResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
             }
 
             // Update board
@@ -53,6 +58,13 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
     }
 
     private boolean isValidAction(final PenteAction action, final PenteState state) {
+        int size = state.board().length;
+        int center = size / 2;
+        boolean isFirstMove = state.round() == 0;
+        if (isFirstMove) {
+            return action.row() == center && action.col() == center && state.board()[center][center] == null;
+        }
+
         return inBounds(state.board(), action.row(), action.col()) && state.board()[action.row()][action.col()] == null;
     }
 

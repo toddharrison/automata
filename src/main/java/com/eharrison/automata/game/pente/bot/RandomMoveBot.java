@@ -22,6 +22,14 @@ public class RandomMoveBot implements PenteBot {
 
     @Override
     public PenteAction act(final PenteView view) {
+        if (view.round() == 0) {
+            return makeRequiredFirstMoveInCenter(view);
+        } else {
+            return makeRandomMove(view);
+        }
+    }
+
+    private PenteAction makeRandomMove(final PenteView view) {
         val legalMoves = new ArrayList<PenteAction>();
         for (int r = 0; r < view.board().length; r++) {
             for (int c = 0; c < view.board()[r].length; c++) {

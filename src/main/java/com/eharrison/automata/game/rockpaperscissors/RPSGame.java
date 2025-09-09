@@ -22,6 +22,9 @@ public class RPSGame implements Game<RPSConfig, RPSState, RPSView, RPSAction, RP
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
 
+        bot1.init();
+        bot2.init();
+
         var state = new RPSState(config.rounds(), bot1, bot2);
 
         // TODO Games to play

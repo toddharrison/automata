@@ -33,6 +33,6 @@ public class PenteGameTest {
         System.out.println(result.state().display());
 
         // Assert
-        System.out.println(result.winner() == null ? "Draw" : "Winner: " + (result.winner() == bots.getFirst() ? "Bot 1" : "Bot 2"));
+        System.out.println(result.winner() == null ? "Draw" : "Winner: " + (result.winner() == bots.get(0) ? "Bot 1" : "Bot 2"));
     }
 }

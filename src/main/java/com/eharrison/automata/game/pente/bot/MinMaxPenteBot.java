@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.UUID;
 
 public class MinMaxPenteBot implements PenteBot {
+    private static final int[][] directions = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+
     private final UUID id = UUID.randomUUID();
 
     @Override
@@ -25,12 +27,13 @@ public class MinMaxPenteBot implements PenteBot {
         val board = view.board();
         val opponentId = view.opponentId();
         val size = board.length;
-        val maxDepth = 1;
+        val maxDepth = 2;
 
         PenteAction bestAction = null;
         int bestScore = Integer.MIN_VALUE;
 
         // Search all possible moves
+        // TODO save all best actions by score and pick randomly from them
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (board[r][c] == null) {
@@ -48,7 +51,7 @@ public class MinMaxPenteBot implements PenteBot {
         return bestAction != null ? bestAction : randomFallback(board);
     }
 
-    private int minimax(UUID[][] board, int depth, boolean maximizing, int alpha, int beta, UUID opponentId) {
+    private int minimax(final UUID[][] board, final int depth, final boolean maximizing, int alpha, int beta, final UUID opponentId) {
         if (depth == 0 || isTerminal(board, opponentId)) {
             return evaluate(board, opponentId);
         }
@@ -94,11 +97,6 @@ public class MinMaxPenteBot implements PenteBot {
     private int scoreBoard(final UUID[][] board, final UUID playerId) {
         int score = 0;
         int size = board.length;
-
-        int[][] directions = {
-                {1, 0}, {0, 1}, {1, 1}, {1, -1}
-        };
-
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (board[r][c] == playerId) {
@@ -141,9 +139,6 @@ public class MinMaxPenteBot implements PenteBot {
 
     private boolean hasWin(final UUID[][] board, final UUID playerId) {
         int size = board.length;
-        int[][] directions = {
-                {1, 0}, {0, 1}, {1, 1}, {1, -1}
-        };
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (playerId == board[r][c]) {

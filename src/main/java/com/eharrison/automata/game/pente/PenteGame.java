@@ -34,7 +34,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
             val action = state.currentBot().act(state.viewFor(state.currentBot()));
             if (!isValidAction(action, state)) {
                 // Invalid action, current bot loses
-                // TODO indicate forfeit
+                // TODO indicate forfeit in result
                 return new PenteResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
             }
 
@@ -58,10 +58,9 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
     }
 
     private boolean isValidAction(final PenteAction action, final PenteState state) {
-        int size = state.board().length;
-        int center = size / 2;
         boolean isFirstMove = state.round() == 0;
         if (isFirstMove) {
+            int center = state.board().length / 2;
             return action.row() == center && action.col() == center && state.board()[center][center] == null;
         }
 
@@ -117,7 +116,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
             int r2 = row + 2 * dir[0], c2 = col + 2 * dir[1];
             int r3 = row + 3 * dir[0], c3 = col + 3 * dir[1];
             if (inBounds(board, r1, c1) && inBounds(board, r2, c2) && inBounds(board, r3, c3)) {
-                if (isOpponent(board, bot, r1, c1) && isOpponent(board, bot, r2, c2) && bot.getId() == board[r3][c3]) {
+                if (isOpponentOccupied(board, bot, r1, c1) && isOpponentOccupied(board, bot, r2, c2) && bot.getId() == board[r3][c3]) {
                     // Capture opponentId pieces
                     board[r1][c1] = null;
                     board[r2][c2] = null;
@@ -133,7 +132,7 @@ public class PenteGame implements Game<PenteConfig, PenteState, PenteView, Pente
         return row >= 0 && row < board.length && col >= 0 && col < board[row].length;
     }
 
-    private boolean isOpponent(final UUID[][] board, final PenteBot bot, final int row, final int col) {
+    private boolean isOpponentOccupied(final UUID[][] board, final PenteBot bot, final int row, final int col) {
         return board[row][col] != null && bot.getId() != board[row][col];
     }
 }

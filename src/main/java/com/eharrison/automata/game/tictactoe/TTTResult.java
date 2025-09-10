@@ -7,4 +7,4 @@ public record TTTResult(
         int rounds,
         TTTState state,
         TTTBot winner
-) implements Result<TTTState, TTTBot> {}
+) implements Result<TTTState, TTTView, TTTAction, TTTResult, TTTBot> {}

@@ -23,7 +23,7 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
     }
 
     @Override
-    public Match<TTTState, TTTBot, TTTResult> runMatch(final TTTConfig config, final List<TTTBot> bots) {
+    public Match<TTTState, TTTView, TTTAction, TTTResult, TTTBot> runMatch(final TTTConfig config, final List<TTTBot> bots) {
         require(config.gamesInMatch() > 0, "Tic-Tac-Toe requires at least 1 game to play.");
         require(bots.size() == 2, "Tic-Tac-Toe requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Tic-Tac-Toe requires different bots.");

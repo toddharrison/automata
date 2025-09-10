@@ -16,7 +16,7 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
     }
 
     @Override
-    public Match<RPSState, RPSBot, RPSResult> runMatch(final RPSConfig config, final List<RPSBot> bots) {
+    public Match<RPSState, RPSView, RPSAction, RPSResult, RPSBot> runMatch(final RPSConfig config, final List<RPSBot> bots) {
         require(config.gamesInMatch() > 0, "Rock Paper Scissors requires at least 1 game to play.");
         require(config.rounds() > 0, "Rock Paper Scissors requires at least 1 round.");
         require(bots.size() == 2, "Rock Paper Scissors requires exactly 2 bots.");

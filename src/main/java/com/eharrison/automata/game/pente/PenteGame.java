@@ -25,7 +25,7 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
     }
 
     @Override
-    public Match<PenteState, PenteBot, PenteResult> runMatch(final PenteConfig config, final List<PenteBot> bots) {
+    public Match<PenteState, PenteView, PenteAction, PenteResult, PenteBot> runMatch(final PenteConfig config, final List<PenteBot> bots) {
         require(config.gamesInMatch() > 0, "Pente requires at least 1 game in match.");
         require(bots.size() == 2, "Pente requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Pente requires different bots.");

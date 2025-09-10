@@ -12,7 +12,7 @@ public record RPSState(
         int bot2Score,
         RPSAction lastBot1Action,
         RPSAction lastBot2Action
-) implements State<RPSBot> {
+) implements State<RPSState, RPSView, RPSAction, RPSResult, RPSBot> {
     public RPSState(int totalRounds, RPSBot bot1, RPSBot bot2) {
         this(0, totalRounds, bot1, bot2, 0, 0, null, null);
     }

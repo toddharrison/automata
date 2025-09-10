@@ -7,4 +7,4 @@ public record PenteResult(
         int rounds,
         PenteState state,
         PenteBot winner
-) implements Result<PenteState, PenteBot> {}
+) implements Result<PenteState, PenteView, PenteAction, PenteResult, PenteBot> {}

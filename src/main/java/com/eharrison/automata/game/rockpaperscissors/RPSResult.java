@@ -10,4 +10,4 @@ public record RPSResult(
         Map<RPSBot, Integer> finalScores,
         RPSState state,
         RPSBot winner
-) implements Result<RPSState, RPSBot> {}
+) implements Result<RPSState, RPSView, RPSAction, RPSResult, RPSBot> {}

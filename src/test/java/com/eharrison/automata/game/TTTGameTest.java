@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 public class TTTGameTest {
     private TTTGame game;
@@ -24,13 +26,15 @@ public class TTTGameTest {
     @Test
     public void call() {
         // Arrange
-        val config = new TTTConfig(5);
+        val gamesToPlay = 5;
+        val config = new TTTConfig(gamesToPlay);
         val bots = List.<TTTBot>of(new RandomMoveBot(), new RandomMoveBot());
 
         // Act
         val result = game.run(config, bots);
 
         // Assert
-        System.out.println(result.winner() == null ? "Draw" : "Winner: " + (result.winner() == bots.get(0) ? "Bot 1" : "Bot 2"));
+        assertEquals(gamesToPlay, result.gamesPlayed());
+        assertEquals(gamesToPlay, result.wins().values().stream().mapToInt(Integer::intValue).sum() + result.draws());
     }
 }

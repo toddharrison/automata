@@ -129,7 +129,7 @@ public class MinMaxPenteBot implements PenteBot {
                         if (rr >= 0 && rr < size && cc >= 0 && cc < size && board[rr][cc] == null) openEnds++;
 
                         // Heuristic scoring
-                        if (count >= 5) score += 100000; // win
+                        if (count >= 5) score += 100000;                      // win
                         else if (count == 4 && openEnds == 2) score += 10000; // open 4
                         else if (count == 4 && openEnds == 1) score += 1000;  // closed 4
                         else if (count == 3 && openEnds == 2) score += 500;   // open 3

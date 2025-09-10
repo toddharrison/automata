@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @ExtendWith(MockitoExtension.class)
 public class RPSGameTest {
@@ -26,17 +27,18 @@ public class RPSGameTest {
     @Test
     public void call() {
         // Arrange
-        val gamesToPlay = 1;
-        val rounds = 5;
+        val gamesToPlay = 5;
+        val rounds = 3;
         val config = new RPSConfig(gamesToPlay, rounds);
-        val bots = List.of(new AlwaysRockBot(), new AlwaysScissorsBot());
+        val bot1 = new AlwaysRockBot();
+        val bot2 = new AlwaysScissorsBot();
 
         // Act
-        val result = game.run(config, bots);
+        val result = game.run(config, List.of(bot1, bot2));
 
         // Assert
-        assertEquals(rounds, result.rounds());
-        assertEquals(rounds, result.finalScores().get(bots.get(0))); // AlwaysRockBot should win all rounds
-        assertEquals(0, result.finalScores().get(bots.get(1))); // AlwaysScissorsBot should lose all rounds
+        assertEquals(gamesToPlay, result.gamesPlayed());
+        assertEquals(gamesToPlay, result.wins().get(bot1)); // AlwaysRockBot should win all games
+        assertFalse(result.wins().containsKey(bot2)); // AlwaysScissorsBot should never win any games
     }
 }

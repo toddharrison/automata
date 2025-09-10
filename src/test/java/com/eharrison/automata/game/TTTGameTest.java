@@ -2,10 +2,12 @@ package com.eharrison.automata.game;
 
 import com.eharrison.automata.game.tictactoe.TTTConfig;
 import com.eharrison.automata.game.tictactoe.TTTGame;
+import com.eharrison.automata.game.tictactoe.bot.ForfeitBot;
 import com.eharrison.automata.game.tictactoe.bot.RandomMoveBot;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,6 +29,29 @@ public class TTTGameTest {
     @BeforeEach
     public void setUp() {
         game = new TTTGame(random);
+    }
+
+    @Nested
+    public class ForfeitTest {
+        private @Mock TTTBot bot1;
+
+        @Test
+        public void loseEveryGameInEveryMatch() {
+            // Arrange
+            val gamesToPlay = 5;
+            val config = new TTTConfig(gamesToPlay);
+            val bot2 = new ForfeitBot();
+
+            when(random.nextBoolean()).thenReturn(false);
+
+            // Act
+            val result = game.runMatch(config, List.of(bot1, bot2));
+
+            // Assert
+            assertEquals(gamesToPlay, result.wins().get(bot1));
+            assertTrue(result.results().stream().allMatch(r -> r.winner() == bot1));
+            assertTrue(result.results().stream().allMatch(r -> r.rounds() == 0));
+        }
     }
 
     @Test

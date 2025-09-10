@@ -87,7 +87,8 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
 
     @Override
     public boolean isValidAction(final TTTState state, final TTTAction action) {
-        return action.row() >= 0 && action.row() < 3 &&
+        return action != null &&
+                action.row() >= 0 && action.row() < 3 &&
                 action.col() >= 0 && action.col() < 3 &&
                 state.board()[action.row()][action.col()] == null;
     }

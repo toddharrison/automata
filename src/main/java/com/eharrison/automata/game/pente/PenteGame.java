@@ -91,6 +91,8 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
 
     @Override
     public boolean isValidAction(final PenteState state, final PenteAction action) {
+        if (action == null) return false;
+
         boolean isFirstMove = state.round() == 0;
         if (isFirstMove) {
             int center = state.board().length / 2;

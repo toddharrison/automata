@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class Game<C extends Config, S extends State<B>, V extends View, A extends Action, R extends Result<S, B>, B extends Bot<V, A, R>> {
+public abstract class Game<C extends Config, S extends State<B>, V extends View, A extends Action, R extends Result<S, B>, B extends Bot<S, V, A, R, B>> {
     public abstract String getName();
 
-    public abstract Match<B, R> runMatch(C config, List<B> bots);
+    public abstract Match<S, B, R> runMatch(C config, List<B> bots);
 
     public abstract R run(C config, List<B> bots, int gameNumber, S startingState);
 
@@ -21,7 +21,7 @@ public abstract class Game<C extends Config, S extends State<B>, V extends View,
         }
     }
 
-    public Match<B, R> processResults(final List<R> results) {
+    public Match<S, B, R> processResults(final List<R> results) {
         val wins = results.stream()
                 .map(Result::winner)
                 .filter(Objects::nonNull)

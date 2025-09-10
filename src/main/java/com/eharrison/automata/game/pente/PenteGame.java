@@ -1,6 +1,5 @@
 package com.eharrison.automata.game.pente;
 
-import com.eharrison.automata.game.Bot;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Match;
 import com.eharrison.automata.game.pente.bot.PenteBot;
@@ -26,15 +25,15 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
     }
 
     @Override
-    public Match<PenteBot, PenteResult> runMatch(final PenteConfig config, final List<PenteBot> bots) {
-        require(config.gamesToPlay() > 0, "Pente requires at least 1 game to play.");
+    public Match<PenteState, PenteBot, PenteResult> runMatch(final PenteConfig config, final List<PenteBot> bots) {
+        require(config.gamesInMatch() > 0, "Pente requires at least 1 game in match.");
         require(bots.size() == 2, "Pente requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Pente requires different bots.");
 
-        bots.forEach(Bot::init);
+        bots.forEach(b -> b.init(config.gamesInMatch()));
 
         val results = new ArrayList<PenteResult>();
-        for (int i = 0; i < config.gamesToPlay(); i++) {
+        for (int i = 0; i < config.gamesInMatch(); i++) {
             val bot1 = bots.get(0);
             val bot2 = bots.get(1);
             val bot1Starts = random.nextBoolean();
@@ -84,8 +83,8 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
             // Draw
             result = new PenteResult(state.round(), state, null);
         }
-        bot1.end(result);
-        bot2.end(result);
+        bot1.end(gameNumber, result);
+        bot2.end(gameNumber, result);
 
         return result;
     }

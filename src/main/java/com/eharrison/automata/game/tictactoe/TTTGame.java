@@ -1,6 +1,5 @@
 package com.eharrison.automata.game.tictactoe;
 
-import com.eharrison.automata.game.Bot;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Match;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
@@ -24,15 +23,15 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
     }
 
     @Override
-    public Match<TTTBot, TTTResult> runMatch(final TTTConfig config, final List<TTTBot> bots) {
-        require(config.gamesToPlay() > 0, "Tic-Tac-Toe requires at least 1 game to play.");
+    public Match<TTTState, TTTBot, TTTResult> runMatch(final TTTConfig config, final List<TTTBot> bots) {
+        require(config.gamesInMatch() > 0, "Tic-Tac-Toe requires at least 1 game to play.");
         require(bots.size() == 2, "Tic-Tac-Toe requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Tic-Tac-Toe requires different bots.");
 
-        bots.forEach(Bot::init);
+        bots.forEach(b -> b.init(config.gamesInMatch()));
 
         val results = new ArrayList<TTTResult>();
-        for (int i = 0; i < config.gamesToPlay(); i++) {
+        for (int i = 0; i < config.gamesInMatch(); i++) {
             val bot1 = bots.get(0);
             val bot2 = bots.get(1);
             val bot1Starts = random.nextBoolean();
@@ -80,8 +79,8 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
             // Draw
             result = new TTTResult(state.round(), state, null);
         }
-        bot1.end(result);
-        bot2.end(result);
+        bot1.end(gameNumber, result);
+        bot2.end(gameNumber, result);
 
         return result;
     }

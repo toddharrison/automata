@@ -1,6 +1,5 @@
 package com.eharrison.automata.game.rockpaperscissors;
 
-import com.eharrison.automata.game.Bot;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Match;
 import com.eharrison.automata.game.rockpaperscissors.bot.RPSBot;
@@ -17,16 +16,16 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
     }
 
     @Override
-    public Match<RPSBot, RPSResult> runMatch(final RPSConfig config, final List<RPSBot> bots) {
-        require(config.gamesToPlay() > 0, "Rock Paper Scissors requires at least 1 game to play.");
+    public Match<RPSState, RPSBot, RPSResult> runMatch(final RPSConfig config, final List<RPSBot> bots) {
+        require(config.gamesInMatch() > 0, "Rock Paper Scissors requires at least 1 game to play.");
         require(config.rounds() > 0, "Rock Paper Scissors requires at least 1 round.");
         require(bots.size() == 2, "Rock Paper Scissors requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Rock Paper Scissors requires different bots.");
 
-        bots.forEach(Bot::init);
+        bots.forEach(b -> b.init(config.gamesInMatch()));
 
         val results = new ArrayList<RPSResult>();
-        for (int i = 0; i < config.gamesToPlay(); i++) {
+        for (int i = 0; i < config.gamesInMatch(); i++) {
             val bot1 = bots.get(0);
             val bot2 = bots.get(1);
             val startingState = new RPSState(config.rounds(), bot1, bot2);
@@ -70,8 +69,8 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
         }
         val winner = state.bot1Score() > state.bot2Score() ? state.bot1() : state.bot2();
         val result = new RPSResult(state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
-        bot1.end(result);
-        bot2.end(result);
+        bot1.end(gameNumber, result);
+        bot2.end(gameNumber, result);
 
         return result;
     }

@@ -45,7 +45,7 @@ public class PenteGameTest {
             val size = 5;
             val gamesToPlay = 5;
 
-            when(config.gamesToPlay()).thenReturn(gamesToPlay);
+            when(config.gamesInMatch()).thenReturn(gamesToPlay);
             when(config.size()).thenReturn(size);
             when(bot1.act(any())).thenReturn(action);
             when(action.row()).thenReturn(size / 2);

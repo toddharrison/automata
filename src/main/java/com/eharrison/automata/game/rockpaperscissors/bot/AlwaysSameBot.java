@@ -5,25 +5,17 @@ import com.eharrison.automata.game.rockpaperscissors.RPSView;
 import lombok.val;
 
 import java.util.Random;
-import java.util.UUID;
 
-public class AlwaysSameBot implements RPSBot {
-    private final UUID id = UUID.randomUUID();
+public class AlwaysSameBot extends RPSBot {
+    public static final String TEAM_NAME = "My Team";
+    public static final String NAME = "Always Same Choice Bot";
+
     private final RPSAction choice;
 
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
     public AlwaysSameBot() {
+        super(TEAM_NAME, NAME);
         val actions = RPSAction.values();
         choice = actions[new Random().nextInt(actions.length)];
-    }
-
-    @Override
-    public String getName() {
-        return "Always Same Choice Bot";
     }
 
     @Override

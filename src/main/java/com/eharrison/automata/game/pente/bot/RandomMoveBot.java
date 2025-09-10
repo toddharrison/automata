@@ -5,19 +5,13 @@ import com.eharrison.automata.game.pente.PenteView;
 import lombok.val;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class RandomMoveBot implements PenteBot {
-    private final UUID id = UUID.randomUUID();
+public class RandomMoveBot extends PenteBot {
+    public static final String TEAM_NAME = "My Team";
+    public static final String NAME = "Random Pente Bot";
 
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public String getName() {
-        return "Random Pente Bot";
+    public RandomMoveBot() {
+        super(TEAM_NAME, NAME);
     }
 
     @Override

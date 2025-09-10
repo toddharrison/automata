@@ -7,19 +7,14 @@ import lombok.val;
 import java.util.Random;
 import java.util.UUID;
 
-public class MinMaxPenteBot implements PenteBot {
-    private static final int[][] directions = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
+public class MinMaxPenteBot extends PenteBot {
+    public static final String TEAM_NAME = "My Team";
+    public static final String NAME = "Min-Max Pente Bot";
 
-    private final UUID id = UUID.randomUUID();
+    private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
 
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public String getName() {
-        return "MinMax Pente Bot";
+    public MinMaxPenteBot() {
+        super(TEAM_NAME, NAME);
     }
 
     @Override
@@ -45,7 +40,7 @@ public class MinMaxPenteBot implements PenteBot {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (board[r][c] == null) {
-                    board[r][c] = id;
+                    board[r][c] = getId();
                     int score = minimax(board, maxDepth - 1, false, Integer.MIN_VALUE, Integer.MAX_VALUE, opponentId);
                     board[r][c] = null;
                     if (score > bestScore) {
@@ -70,7 +65,7 @@ public class MinMaxPenteBot implements PenteBot {
             for (int r = 0; r < size; r++) {
                 for (int c = 0; c < size; c++) {
                     if (board[r][c] == null) {
-                        board[r][c] = id;
+                        board[r][c] = getId();
                         int eval = minimax(board, depth - 1, false, alpha, beta, opponentId);
                         board[r][c] = null;
                         maxEval = Math.max(maxEval, eval);
@@ -85,7 +80,7 @@ public class MinMaxPenteBot implements PenteBot {
             for (int r = 0; r < size; r++) {
                 for (int c = 0; c < size; c++) {
                     if (board[r][c] == null) {
-                        board[r][c] = id;
+                        board[r][c] = getId();
                         int eval = minimax(board, depth - 1, true, alpha, beta, opponentId);
                         board[r][c] = null;
                         minEval = Math.min(minEval, eval);
@@ -99,7 +94,7 @@ public class MinMaxPenteBot implements PenteBot {
     }
 
     private int evaluate(final UUID[][] board, final UUID opponentId) {
-        return scoreBoard(board, id) - scoreBoard(board, opponentId);
+        return scoreBoard(board, getId()) - scoreBoard(board, opponentId);
     }
 
     private int scoreBoard(final UUID[][] board, final UUID playerId) {
@@ -108,7 +103,7 @@ public class MinMaxPenteBot implements PenteBot {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (board[r][c] == playerId) {
-                    for (int[] d : directions) {
+                    for (int[] d : DIRECTIONS) {
                         int count = 1;
                         int openEnds = 0;
 
@@ -142,7 +137,7 @@ public class MinMaxPenteBot implements PenteBot {
     }
 
     private boolean isTerminal(final UUID[][] board, final UUID opponentId) {
-        return hasWin(board, id) || hasWin(board, opponentId) || isFull(board);
+        return hasWin(board, getId()) || hasWin(board, opponentId) || isFull(board);
     }
 
     private boolean hasWin(final UUID[][] board, final UUID playerId) {
@@ -150,7 +145,7 @@ public class MinMaxPenteBot implements PenteBot {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (playerId == board[r][c]) {
-                    for (int[] d : directions) {
+                    for (int[] d : DIRECTIONS) {
                         int count = 1;
                         int rr = r + d[0], cc = c + d[1];
                         while (rr >= 0 && rr < size && cc >= 0 && cc < size && playerId == board[rr][cc]) {

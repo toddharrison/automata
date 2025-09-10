@@ -53,7 +53,7 @@ public class PenteGameTest {
             when(random.nextBoolean()).thenReturn(true);
 
             // Act
-            val result = game.run(config, List.of(bot1, bot2));
+            val result = game.runMatch(config, List.of(bot1, bot2));
 
             // Assert
             assertEquals(gamesToPlay, result.gamesPlayed());
@@ -74,7 +74,10 @@ public class PenteGameTest {
             when(random.nextBoolean()).thenReturn(false);
 
             // Act
-            val result = game.run(config, List.of(bot1, bot2));
+            val result = game.runMatch(config, List.of(bot1, bot2));
+
+//            result.results().forEach(r -> System.out.println(r.state().display()));
+//            System.out.println(result.wins());
 
             // Assert
             assertEquals(gamesToPlay, result.gamesPlayed());

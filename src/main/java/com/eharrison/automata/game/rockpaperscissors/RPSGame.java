@@ -1,5 +1,6 @@
 package com.eharrison.automata.game.rockpaperscissors;
 
+import com.eharrison.automata.game.Bot;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Match;
 import com.eharrison.automata.game.rockpaperscissors.bot.RPSBot;
@@ -16,55 +17,63 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
     }
 
     @Override
-    public Match<RPSBot, RPSResult> run(final RPSConfig config, final List<RPSBot> bots) {
+    public Match<RPSBot, RPSResult> runMatch(final RPSConfig config, final List<RPSBot> bots) {
         require(config.gamesToPlay() > 0, "Rock Paper Scissors requires at least 1 game to play.");
         require(config.rounds() > 0, "Rock Paper Scissors requires at least 1 round.");
         require(bots.size() == 2, "Rock Paper Scissors requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Rock Paper Scissors requires different bots.");
 
-        val bot1 = bots.get(0);
-        val bot2 = bots.get(1);
-
-        bot1.init();
-        bot2.init();
+        bots.forEach(Bot::init);
 
         val results = new ArrayList<RPSResult>();
         for (int i = 0; i < config.gamesToPlay(); i++) {
-            var state = new RPSState(config.rounds(), bot1, bot2);
+            val bot1 = bots.get(0);
+            val bot2 = bots.get(1);
+            val startingState = new RPSState(config.rounds(), bot1, bot2);
 
-            bot1.start(i);
-            bot2.start(i);
-
-            while (!isGameOver(state)) {
-                int score1 = state.bot1Score();
-                int score2 = state.bot2Score();
-
-                val action1 = bot1.act(state.viewFor(bot1));
-                val action2 = bot2.act(state.viewFor(bot2));
-
-                val action1Valid = isValidAction(state, action1);
-                val action2Valid = isValidAction(state, action2);
-                if (!action1Valid && action2Valid) {
-                    // forfeit to bot2
-                    score2 += 1;
-                } else if (action1Valid && !action2Valid) {
-                    // forfeit to bot1
-                    score1 += 1;
-                } else if (action1Valid) {
-                    score1 = isWin(action1, action2) ? state.bot1Score() + 1 : state.bot1Score();
-                    score2 = isWin(action2, action1) ? state.bot2Score() + 1 : state.bot2Score();
-                }
-
-                state = state.next(score1, score2, action1, action2);
-            }
-            val winner = state.bot1Score() > state.bot2Score() ? state.bot1() : state.bot2();
-            val result = new RPSResult(state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
-            bot1.end(result);
-            bot2.end(result);
-
-            results.add(result);
+            results.add(run(config, bots, i, startingState));
         }
         return processResults(results);
+    }
+
+    @Override
+    public RPSResult run(final RPSConfig config, final List<RPSBot> bots, final int gameNumber, final RPSState startingState) {
+        val bot1 = bots.get(0);
+        val bot2 = bots.get(1);
+
+        var state = startingState;
+
+        bot1.start(gameNumber);
+        bot2.start(gameNumber);
+
+        while (!isGameOver(state)) {
+            int score1 = state.bot1Score();
+            int score2 = state.bot2Score();
+
+            val action1 = bot1.act(state.viewFor(bot1));
+            val action2 = bot2.act(state.viewFor(bot2));
+
+            val action1Valid = isValidAction(state, action1);
+            val action2Valid = isValidAction(state, action2);
+            if (!action1Valid && action2Valid) {
+                // forfeit to bot2
+                score2 += 1;
+            } else if (action1Valid && !action2Valid) {
+                // forfeit to bot1
+                score1 += 1;
+            } else if (action1Valid) {
+                score1 = isWin(action1, action2) ? state.bot1Score() + 1 : state.bot1Score();
+                score2 = isWin(action2, action1) ? state.bot2Score() + 1 : state.bot2Score();
+            }
+
+            state = state.next(score1, score2, action1, action2);
+        }
+        val winner = state.bot1Score() > state.bot2Score() ? state.bot1() : state.bot2();
+        val result = new RPSResult(state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
+        bot1.end(result);
+        bot2.end(result);
+
+        return result;
     }
 
     @Override

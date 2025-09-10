@@ -34,7 +34,10 @@ public class RPSGameTest {
         val bot2 = new AlwaysScissorsBot();
 
         // Act
-        val result = game.run(config, List.of(bot1, bot2));
+        val result = game.runMatch(config, List.of(bot1, bot2));
+
+//        result.results().forEach(r -> System.out.println(r.state().display()));
+//        System.out.println(result.wins());
 
         // Assert
         assertEquals(gamesToPlay, result.gamesPlayed());

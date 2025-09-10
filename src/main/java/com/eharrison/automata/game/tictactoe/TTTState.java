@@ -27,6 +27,7 @@ public record TTTState(
         return new TTTState(round + 1, bot1, bot2, newBoard, lastAction, currentBot == bot1 ? bot2 : bot1);
     }
 
+    @Override
     public String display() {
         val sb = new StringBuilder();
         for (val cells : board) {

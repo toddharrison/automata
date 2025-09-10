@@ -16,9 +16,10 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
     }
 
     @Override
-    public Match run(final TTTConfig config, final List<TTTBot> bots) {
+    public Match<TTTBot, TTTResult> run(final TTTConfig config, final List<TTTBot> bots) {
         require(config.gamesToPlay() > 0, "Tic-Tac-Toe requires at least 1 game to play.");
         require(bots.size() == 2, "Tic-Tac-Toe requires exactly 2 bots.");
+        require(bots.get(0) != bots.get(1), "Tic-Tac-Toe requires different bots.");
 
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
@@ -39,7 +40,7 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
                 val action = state.currentBot().act(state.viewFor(state.currentBot()));
                 if (!isValidAction(state, action)) {
                     // Invalid action, current bot loses
-                    result = new TTTResult(state.round(), state.currentBot() == bot1 ? bot2 : bot1);
+                    result = new TTTResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
                     break;
                 }
 
@@ -50,16 +51,16 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
 
                 // Check for win
                 if (isWin(newBoard, bot1)) {
-                    result = new TTTResult(state.round(), bot1); // Bot1 wins
+                    result = new TTTResult(state.round(), state, bot1); // Bot1 wins
                     break;
                 } else if (isWin(newBoard, bot2)) {
-                    result = new TTTResult(state.round(), bot2); // Bot2 wins
+                    result = new TTTResult(state.round(), state, bot2); // Bot2 wins
                     break;
                 }
             }
             if (result == null) {
                 // Draw
-                result = new TTTResult(state.round(), null);
+                result = new TTTResult(state.round(), state, null);
             }
             bot1.end(result);
             bot2.end(result);

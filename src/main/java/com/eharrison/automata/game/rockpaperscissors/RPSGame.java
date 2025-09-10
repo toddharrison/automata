@@ -16,11 +16,11 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
     }
 
     @Override
-    public Match run(final RPSConfig config, final List<RPSBot> bots) {
+    public Match<RPSBot, RPSResult> run(final RPSConfig config, final List<RPSBot> bots) {
         require(config.gamesToPlay() > 0, "Rock Paper Scissors requires at least 1 game to play.");
         require(config.rounds() > 0, "Rock Paper Scissors requires at least 1 round.");
-        require(config.rounds() % 2 == 1, "Rock Paper Scissors requires an odd number of rounds.");
         require(bots.size() == 2, "Rock Paper Scissors requires exactly 2 bots.");
+        require(bots.get(0) != bots.get(1), "Rock Paper Scissors requires different bots.");
 
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
@@ -58,7 +58,7 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
                 state = state.next(score1, score2, action1, action2);
             }
             val winner = state.bot1Score() > state.bot2Score() ? state.bot1() : state.bot2();
-            val result = new RPSResult(state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), winner);
+            val result = new RPSResult(state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
             bot1.end(result);
             bot2.end(result);
 

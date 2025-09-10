@@ -9,5 +9,6 @@ import java.util.Map;
 public record RPSResult(
         int rounds,
         Map<Bot<?, ?, ?>, Integer> finalScores,
+        RPSState state,
         RPSBot winner
-) implements Result<RPSBot> {}
+) implements Result<RPSState, RPSBot> {}

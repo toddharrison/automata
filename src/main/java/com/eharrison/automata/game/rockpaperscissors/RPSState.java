@@ -31,4 +31,9 @@ public record RPSState(
     public RPSState next(final int score1, final int score2, final RPSAction action1, final RPSAction action2) {
         return new RPSState(round + 1, totalRounds, bot1, bot2, score1, score2, action1, action2);
     }
+
+    @Override
+    public String display() {
+        return String.format("Rounds: %d, Bot1Wins: %d, Bot2Wins: %d, Draws: %d", round, bot1Score, bot2Score, totalRounds - (bot1Score + bot2Score));
+    }
 }

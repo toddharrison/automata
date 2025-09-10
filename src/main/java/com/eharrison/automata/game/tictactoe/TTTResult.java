@@ -5,5 +5,6 @@ import com.eharrison.automata.game.tictactoe.bot.TTTBot;
 
 public record TTTResult(
         int rounds,
+        TTTState state,
         TTTBot winner
-) implements Result<TTTBot> {}
+) implements Result<TTTState, TTTBot> {}

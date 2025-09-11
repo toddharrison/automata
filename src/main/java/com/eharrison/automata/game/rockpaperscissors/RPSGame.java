@@ -57,7 +57,8 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
             score2 = isWin(action2, action1) ? state.bot2Score() + 1 : state.bot2Score();
         }
 
-        return new Update<>(state.next(score1, score2, action1, action2));
+        val newState = state.next(score1, score2, action1, action2);
+        return new Update<>(newState);
     }
 
     @Override

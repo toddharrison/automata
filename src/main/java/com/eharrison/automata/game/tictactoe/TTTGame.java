@@ -6,7 +6,6 @@ import com.eharrison.automata.game.tictactoe.bot.TTTBot;
 import lombok.val;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -47,7 +46,7 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
         if (!isValidAction(state, action)) {
             // Invalid action, current bot loses
             val result = new TTTResult(gameNumber, state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
-            return new Update<>(state, Optional.of(result));
+            return new Update<>(state, result);
         }
 
         // Update board
@@ -59,11 +58,11 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
         if (isWin(newBoard, bot1)) {
             // Bot1 wins
             val result = new TTTResult(gameNumber, state.round(), state, bot1);
-            return new Update<>(newState, Optional.of(result));
+            return new Update<>(newState, result);
         } else if (isWin(newBoard, bot2)) {
             // Bot2 wins
             val result = new TTTResult(gameNumber, state.round(), state, bot2);
-            return new Update<>(newState, Optional.of(result));
+            return new Update<>(newState, result);
         }
 
         return new Update<>(newState);

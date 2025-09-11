@@ -6,7 +6,6 @@ import com.eharrison.automata.game.pente.bot.PenteBot;
 import lombok.val;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -51,7 +50,7 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
             // Invalid action, current bot loses
             // TODO indicate forfeit in result
             val result = new PenteResult(gameNumber, state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
-            return new Update<>(state, Optional.of(result));
+            return new Update<>(state, result);
         }
 
         // Update board
@@ -62,7 +61,8 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
 
         // Check for win
         if (isWin(config, newState, bot)) {
-            return new Update<>(newState, Optional.of(new PenteResult(gameNumber, state.round(), state, bot)));
+            val result = new PenteResult(gameNumber, state.round(), state, bot);
+            return new Update<>(newState, result);
         }
 
         return new Update<>(newState);

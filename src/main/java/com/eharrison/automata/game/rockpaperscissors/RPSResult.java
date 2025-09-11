@@ -6,8 +6,9 @@ import com.eharrison.automata.game.rockpaperscissors.bot.RPSBot;
 import java.util.Map;
 
 public record RPSResult(
+        int gameNumber,
         int rounds,
         Map<RPSBot, Integer> finalScores,
         RPSState state,
         RPSBot winner
-) implements Result<RPSState, RPSView, RPSAction, RPSResult, RPSBot> {}
+) implements Result<RPSConfig, RPSState, RPSView, RPSAction, RPSResult, RPSBot> {}

@@ -2,7 +2,7 @@ package com.eharrison.automata.game;
 
 import java.util.UUID;
 
-public abstract class Bot<S extends State<S, V, A, R, B>, V extends View, A extends Action, R extends Result<S, V, A, R, B>, B extends Bot<S, V, A, R, B>> implements Player {
+public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V extends View, A extends Action, R extends Result<C, S, V, A, R, B>, B extends Bot<C, S, V, A, R, B>> implements Player {
     private final UUID id = UUID.randomUUID();
     private final String teamName;
     private final String name;
@@ -24,11 +24,11 @@ public abstract class Bot<S extends State<S, V, A, R, B>, V extends View, A exte
         return name;
     }
 
-    public void init(final int gamesInMatch) {};
+    public void init(final C config) {};
 
     public void start(final int gameNumber) {};
 
     public abstract A act(final V view);
 
-    public void end(final int gameNumber, final R result) {};
+    public void end(final R result) {};
 }

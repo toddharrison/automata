@@ -1,12 +1,12 @@
 package com.eharrison.automata.game.pente;
 
 import com.eharrison.automata.game.Game;
-import com.eharrison.automata.game.Match;
+import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.pente.bot.PenteBot;
 import lombok.val;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -16,77 +16,62 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
     private final Random random;
 
     public PenteGame(final Random random) {
+        super("Pente");
         this.random = random;
     }
 
     @Override
-    public String getName() {
-        return "Pente";
-    }
-
-    @Override
-    public Match<PenteState, PenteView, PenteAction, PenteResult, PenteBot> runMatch(final PenteConfig config, final List<PenteBot> bots) {
+    public void verifyRequirements(final PenteConfig config, final List<PenteBot> bots) {
         require(config.gamesInMatch() > 0, "Pente requires at least 1 game in match.");
         require(bots.size() == 2, "Pente requires exactly 2 bots.");
         require(bots.get(0) != bots.get(1), "Pente requires different bots.");
-
-        bots.forEach(b -> b.init(config.gamesInMatch()));
-
-        val results = new ArrayList<PenteResult>();
-        for (int i = 0; i < config.gamesInMatch(); i++) {
-            val bot1 = bots.get(0);
-            val bot2 = bots.get(1);
-            val bot1Starts = random.nextBoolean();
-            val startingState = new PenteState(bot1, bot2, new UUID[config.size()][config.size()], bot1Starts);
-
-            results.add(run(config, bots, i, startingState));
-        }
-        return processResults(results);
     }
 
     @Override
-    public PenteResult run(final PenteConfig config, final List<PenteBot> bots, final int gameNumber, final PenteState startingState) {
+    public PenteState generateStartingState(final PenteConfig config, final List<PenteBot> bots) {
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
+        val bot1Starts = random.nextBoolean();
+        return new PenteState(bot1, bot2, new UUID[config.size()][config.size()], bot1Starts);
+    }
 
-        var state = startingState;
+    @Override
+    public Update<PenteConfig, PenteState, PenteView, PenteAction, PenteResult, PenteBot> updateState(
+            final PenteConfig config,
+            final int gameNumber,
+            final PenteState state,
+            final List<PenteBot> bots
+    ) {
+        val bot1 = bots.get(0);
+        val bot2 = bots.get(1);
+        val bot = state.currentBot();
+        val action = state.currentBot().act(state.viewFor(bot));
 
-        bot1.start(gameNumber);
-        bot2.start(gameNumber);
-
-        PenteResult result = null;
-        while (!isGameOver(state)) {
-            val bot = state.currentBot();
-            val action = state.currentBot().act(state.viewFor(bot));
-            if (!isValidAction(state, action)) {
-                // Invalid action, current bot loses
-                // TODO indicate forfeit in result
-                result = new PenteResult(state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
-                break;
-            }
-
-            // Update board
-            val newBoard = state.board().clone();
-            newBoard[action.row()][action.col()] = bot.getId();
-            val captures = checkForCaptures(newBoard, bot, action);
-            state = state.next(newBoard, captures, action);
-
-            //            System.out.println(state.display());
-
-            // Check for win
-            if (isWin(config, state, bot)) {
-                result = new PenteResult(state.round(), state, bot);
-                break;
-            }
+        if (!isValidAction(state, action)) {
+            // Invalid action, current bot loses
+            // TODO indicate forfeit in result
+            val result = new PenteResult(gameNumber, state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
+            return new Update<>(state, Optional.of(result));
         }
-        if (result == null) {
-            // Draw
-            result = new PenteResult(state.round(), state, null);
-        }
-        bot1.end(gameNumber, result);
-        bot2.end(gameNumber, result);
 
-        return result;
+        // Update board
+        val newBoard = state.board().clone();
+        newBoard[action.row()][action.col()] = bot.getId();
+        val captures = checkForCaptures(newBoard, bot, action);
+        val newState = state.next(newBoard, captures, action);
+
+        // Check for win
+        if (isWin(config, newState, bot)) {
+            return new Update<>(newState, Optional.of(new PenteResult(gameNumber, state.round(), state, bot)));
+        }
+
+        return new Update<>(newState);
+    }
+
+    @Override
+    public PenteResult getGameOverResult(final int gameNumber, final PenteState state) {
+        // Draw
+        return new PenteResult(gameNumber, state.round(), state, null);
     }
 
     @Override
@@ -102,14 +87,15 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
         return inBounds(state.board(), action.row(), action.col()) && state.board()[action.row()][action.col()] == null;
     }
 
-    private boolean isGameOver(final PenteState state) {
+    @Override
+    public boolean isGameOver(final PenteState state) {
         return state.round() > state.board().length * state.board()[0].length - 1;
     }
 
     private boolean isWin(final PenteConfig config, final PenteState state, final PenteBot bot) {
         // Check rows, columns, and diagonals for 5 in a row
         val board = state.board();
-        int size = board.length;
+        int size = config.size();
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 if (bot.getId() == board[r][c]) {
@@ -131,7 +117,14 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
         else return bot == state.bot2() && state.bot2Captures() >= capturesToWin;
     }
 
-    private boolean checkDirection(final UUID[][] board, final PenteBot bot, final int startRow, final int startCol, final int dRow, final int dCol) {
+    private boolean checkDirection(
+            final UUID[][] board,
+            final PenteBot bot,
+            final int startRow,
+            final int startCol,
+            final int dRow,
+            final int dCol
+    ) {
         for (int i = 0; i < 5; i++) {
             if (bot.getId() != board[startRow + i * dRow][startCol + i * dCol]) {
                 return false;

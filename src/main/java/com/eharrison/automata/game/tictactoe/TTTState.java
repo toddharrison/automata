@@ -13,7 +13,7 @@ public record TTTState(
         UUID[][] board,
         TTTAction lastAction,
         TTTBot currentBot
-) implements State<TTTState, TTTView, TTTAction, TTTResult, TTTBot> {
+) implements State<TTTConfig, TTTState, TTTView, TTTAction, TTTResult, TTTBot> {
     public TTTState(final TTTBot bot1, final TTTBot bot2, final boolean bot1Starts) {
         this(0, bot1, bot2, new UUID[3][3], null, bot1Starts ? bot1 : bot2);
     }

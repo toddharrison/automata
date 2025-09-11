@@ -1,6 +1,7 @@
 package com.eharrison.automata.game;
 
-public interface Result<S extends State<S, V, A, R, B>, V extends View, A extends Action, R extends Result<S, V, A, R, B>, B extends Bot<S, V, A, R, B>> {
+public interface Result<C extends Config, S extends State<C, S, V, A, R, B>, V extends View, A extends Action, R extends Result<C, S, V, A, R, B>, B extends Bot<C, S, V, A, R, B>> {
+    int gameNumber();
     S state();
     B winner();
 }

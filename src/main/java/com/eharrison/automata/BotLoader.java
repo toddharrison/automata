@@ -12,16 +12,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BotLoader {
-    private final List<Bot<?, ?, ?, ?, ?>> bots = new ArrayList<>();
+    private final List<Bot<?, ?, ?, ?, ?, ?>> bots = new ArrayList<>();
 
-    public <B extends Bot<?, ?, ?, ?, ?>> Set<B> getBots(final Class<B> botClass) {
+    public <B extends Bot<?, ?, ?, ?, ?, ?>> Set<B> getBots(final Class<B> botClass) {
         return bots.stream()
                 .filter(botClass::isInstance)
                 .map(botClass::cast)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public void registerBot(final Bot<?, ?, ?, ?, ?> bot) {
+    public void registerBot(final Bot<?, ?, ?, ?, ?, ?> bot) {
         bots.add(bot);
     }
 

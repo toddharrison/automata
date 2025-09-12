@@ -1,5 +1,6 @@
 package com.eharrison.automata.game.pente;
 
+import com.eharrison.automata.Arrays;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.pente.bot.PenteBot;
@@ -44,17 +45,17 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
         val bot = state.currentBot();
-        val action = state.currentBot().act(state.viewFor(bot));
+        val action = bot.act(state.viewFor(bot));
 
-        if (!isValidAction(state, action)) {
+        if (!isValidAction(state, bot, action)) {
             // Invalid action, current bot loses
             // TODO indicate forfeit in result
-            val result = new PenteResult(gameNumber, state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
+            val result = new PenteResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1);
             return new Update<>(state, result);
         }
 
         // Update board
-        val newBoard = state.board().clone();
+        val newBoard = Arrays.deepCopy(UUID.class, state.board());
         newBoard[action.row()][action.col()] = bot.getId();
         val captures = checkForCaptures(newBoard, bot, action);
         val newState = state.next(newBoard, captures, action);
@@ -74,8 +75,8 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
         return new PenteResult(gameNumber, state.round(), state, null);
     }
 
-    @Override
-    public boolean isValidAction(final PenteState state, final PenteAction action) {
+//    @Override
+    private boolean isValidAction(final PenteState state, final PenteBot bot, final PenteAction action) {
         if (action == null) return false;
 
         boolean isFirstMove = state.round() == 0;
@@ -88,7 +89,7 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
     }
 
     @Override
-    public boolean isGameOver(final PenteState state) {
+    public boolean isGameOver(final PenteConfig config, final PenteState state) {
         return state.round() > state.board().length * state.board()[0].length - 1;
     }
 

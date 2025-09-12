@@ -1,5 +1,6 @@
 package com.eharrison.automata.game.tictactoe;
 
+import com.eharrison.automata.Arrays;
 import com.eharrison.automata.game.Game;
 import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
@@ -41,17 +42,18 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
     ) {
         val bot1 = bots.get(0);
         val bot2 = bots.get(1);
+        val bot = state.currentBot();
 
-        val action = state.currentBot().act(state.viewFor(state.currentBot()));
-        if (!isValidAction(state, action)) {
+        val action = bot.act(state.viewFor(bot));
+        if (!isValidAction(state, bot, action)) {
             // Invalid action, current bot loses
-            val result = new TTTResult(gameNumber, state.round(), state, state.currentBot() == bot1 ? bot2 : bot1);
+            val result = new TTTResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1);
             return new Update<>(state, result);
         }
 
         // Update board
-        val newBoard = state.board().clone();
-        newBoard[action.row()][action.col()] = state.currentBot().getId();
+        val newBoard = Arrays.deepCopy(UUID.class, state.board());
+        newBoard[action.row()][action.col()] = bot.getId();
         val newState = state.next(newBoard, action);
 
         // Check for win
@@ -74,8 +76,8 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
         return new TTTResult(gameNumber, state.round(), state, null);
     }
 
-    @Override
-    public boolean isValidAction(final TTTState state, final TTTAction action) {
+//    @Override
+    private boolean isValidAction(final TTTState state, final TTTBot bot, final TTTAction action) {
         return action != null &&
                 action.row() >= 0 && action.row() < 3 &&
                 action.col() >= 0 && action.col() < 3 &&
@@ -83,7 +85,7 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
     }
 
     @Override
-    public boolean isGameOver(final TTTState state) {
+    public boolean isGameOver(final TTTConfig config, final TTTState state) {
         return state.round() > 8;
     }
 

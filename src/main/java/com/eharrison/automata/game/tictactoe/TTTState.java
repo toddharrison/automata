@@ -1,5 +1,6 @@
 package com.eharrison.automata.game.tictactoe;
 
+import com.eharrison.automata.Arrays;
 import com.eharrison.automata.game.State;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
 import lombok.val;
@@ -20,7 +21,7 @@ public record TTTState(
 
     @Override
     public TTTView viewFor(final TTTBot bot) {
-        return new TTTView(round, board.clone(), lastAction);
+        return new TTTView(round, Arrays.deepCopy(UUID.class, board), lastAction);
     }
 
     public TTTState next(final UUID[][] newBoard, final TTTAction lastAction) {

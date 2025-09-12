@@ -44,8 +44,8 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
         val action1 = bot1.act(state.viewFor(bot1));
         val action2 = bot2.act(state.viewFor(bot2));
 
-        val action1Valid = isValidAction(state, action1);
-        val action2Valid = isValidAction(state, action2);
+        val action1Valid = isValidAction(state, bot1, action1);
+        val action2Valid = isValidAction(state, bot2, action2);
         if (!action1Valid && action2Valid) {
             // forfeit to bot2
             score2 += 1;
@@ -67,13 +67,13 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
         return new RPSResult(gameNumber, state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
     }
 
-    @Override
-    public boolean isValidAction(final RPSState state, final RPSAction action) {
+//    @Override
+    private boolean isValidAction(final RPSState state, final RPSBot bot, final RPSAction action) {
         return action == RPSAction.ROCK || action == RPSAction.PAPER || action == RPSAction.SCISSORS;
     }
 
     @Override
-    public boolean isGameOver(final RPSState state) {
+    public boolean isGameOver(final RPSConfig config, final RPSState state) {
         return state.round() >= state.totalRounds();
     }
 

@@ -16,7 +16,7 @@ public interface State<C extends Config, S extends State<C, S, V, A, R, B>, V ex
      * @param bot The bot for which to get the view.
      * @return The view for the bot.
      */
-    View viewFor(final B bot);
+    V viewFor(final B bot);
 
     /**
      * Get a displayable representation of this state.

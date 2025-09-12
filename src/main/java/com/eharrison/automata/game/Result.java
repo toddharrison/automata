@@ -23,6 +23,7 @@ public interface Result<C extends Config, S extends State<C, S, V, A, R, B>, V e
      */
     S state();
 
+    // TODO handle scores instead of wins
     /**
      * The winner of the game.
      * @return The winner of the game, or null if there was a tie.

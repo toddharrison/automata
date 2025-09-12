@@ -65,7 +65,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
         val results = IntStream.range(0, config.gamesInMatch())
                 .mapToObj(i -> run(config, bots, i, generateStartingState(config, bots)))
                 .toList();
-        return combineIntoMatch(results);
+        return combineIntoMatchResults(results);
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
 
         bots.forEach(b -> b.start(gameNumber));
 
-        while (!isGameOver(state)) {
+        while (!isGameOver(config, state)) {
             val update = updateState(config, gameNumber, state, bots);
             state = update.state();
             if (update.result().isPresent()) {
@@ -106,20 +106,22 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
      */
     public abstract Update<C, S, V, A, R, B> updateState(final C config, final int gameNumber, final S state, final List<B> bots);
 
-    /**
-     * Determines if the given action is valid for the given state.
-     * @param state The current state of the game.
-     * @param action The action to validate.
-     * @return True if the action is valid, false otherwise.
-     */
-    public abstract boolean isValidAction(S state, A action);
+//    /**
+//     * Determines if the given action is valid for the given state.
+//     * @param state The current state of the game.
+//     * @param bot The bot making the action.
+//     * @param action The action to validate.
+//     * @return True if the action is valid, false otherwise.
+//     */
+//    public abstract boolean isValidAction(S state, B bot, A action);
 
     /**
      * Determines if the game is over, meaning no more actions can be taken.
+     * @param config The configuration for the game.
      * @param state The current state of the game.
      * @return True if the game is over, false otherwise.
      */
-    public abstract boolean isGameOver(S state);
+    public abstract boolean isGameOver(C config, S state);
 
     /**
      * Get the result of the game after all possible actions have been taken, typically a draw or evaluation of wins.
@@ -145,7 +147,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
      * @param results The results of the games.
      * @return The match result.
      */
-    private Match<C, S, V, A, R, B> combineIntoMatch(final List<R> results) {
+    private Match<C, S, V, A, R, B> combineIntoMatchResults(final List<R> results) {
         val wins = results.stream()
                 .map(Result::winner)
                 .filter(Objects::nonNull)

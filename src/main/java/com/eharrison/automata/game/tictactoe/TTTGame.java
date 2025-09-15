@@ -47,7 +47,7 @@ public class TTTGame extends Game<TTTConfig, TTTState, TTTView, TTTAction, TTTRe
         val action = bot.act(state.viewFor(bot));
         if (!isValidAction(state, bot, action)) {
             // Invalid action, current bot loses
-            val result = new TTTResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1);
+            val result = new TTTResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1, true);
             return new Update<>(state, result);
         }
 

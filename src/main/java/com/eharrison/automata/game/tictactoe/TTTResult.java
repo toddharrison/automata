@@ -7,5 +7,10 @@ public record TTTResult(
         int gameNumber,
         int rounds,
         TTTState state,
-        TTTBot winner
-) implements Result<TTTConfig, TTTState, TTTView, TTTAction, TTTResult, TTTBot> {}
+        TTTBot winner,
+        boolean wasForfeited
+) implements Result<TTTConfig, TTTState, TTTView, TTTAction, TTTResult, TTTBot> {
+    public TTTResult(final int gameNumber, final int rounds, final TTTState state, final TTTBot winner) {
+        this(gameNumber, rounds, state, winner, false);
+    }
+}

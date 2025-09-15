@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 public class ClaimGameTest {
     private ClaimGame game;
@@ -27,7 +29,7 @@ public class ClaimGameTest {
         public void call() {
             // Arrange
             val gamesToPlay = 1;
-            val maxRounds = 20;
+            val maxRounds = 25;
             val size = 5;
             val config = new ClaimConfig(gamesToPlay, maxRounds, size);
             val bot1 = new RandomClaimBot();
@@ -36,11 +38,15 @@ public class ClaimGameTest {
             // Act
             val result = game.runMatch(config, List.of(bot1, bot2));
 
-            result.results().forEach(r -> System.out.println(r.state().display()));
-
             // Assert
-//            assertEquals(gamesToPlay, result.gamesPlayed());
-//            assertEquals(gamesToPlay, result.wins().get(bot2)); // MinMaxPenteBot should win all games against random
+            assertEquals(gamesToPlay, result.gamesPlayed());
+
+            result.results().forEach(r -> System.out.println(r.state().display()));
+            System.out.println("Wins:");
+            System.out.println(result.wins().entrySet().stream()
+                    .map(e -> (e.getKey() == bot1 ? "Bot1" : "Bot2") + " = " + e.getValue())
+                    .toList());
+            System.out.println("Draws: " + result.draws());
         }
     }
 }

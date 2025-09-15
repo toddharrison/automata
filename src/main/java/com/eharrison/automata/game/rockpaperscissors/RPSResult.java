@@ -10,5 +10,10 @@ public record RPSResult(
         int rounds,
         Map<RPSBot, Integer> finalScores,
         RPSState state,
-        RPSBot winner
-) implements Result<RPSConfig, RPSState, RPSView, RPSAction, RPSResult, RPSBot> {}
+        RPSBot winner,
+        boolean wasForfeited
+) implements Result<RPSConfig, RPSState, RPSView, RPSAction, RPSResult, RPSBot> {
+    public RPSResult(final int gameNumber, final int rounds, final Map<RPSBot, Integer> finalScores, final RPSState state, final RPSBot winner) {
+        this(gameNumber, rounds, finalScores, state, winner, false);
+    }
+}

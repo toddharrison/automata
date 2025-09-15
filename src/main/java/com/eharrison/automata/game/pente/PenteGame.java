@@ -49,8 +49,7 @@ public class PenteGame extends Game<PenteConfig, PenteState, PenteView, PenteAct
 
         if (!isValidAction(state, bot, action)) {
             // Invalid action, current bot loses
-            // TODO indicate forfeit in result
-            val result = new PenteResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1);
+            val result = new PenteResult(gameNumber, state.round(), state, bot == bot1 ? bot2 : bot1, true);
             return new Update<>(state, result);
         }
 

@@ -29,4 +29,10 @@ public interface Result<C extends Config, S extends State<C, S, V, A, R, B>, V e
      * @return The winner of the game, or null if there was a tie.
      */
     B winner();
+
+    /**
+     * If the result indicates a loss of the game due to forfeit.
+     * @return True if the loss of the game was due to forfeit.
+     */
+    boolean wasForfeited();
 }

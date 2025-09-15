@@ -76,4 +76,9 @@ public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V
      * @param result The result of the game.
      */
     public void end(final R result) {};
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", name, teamName);
+    }
 }

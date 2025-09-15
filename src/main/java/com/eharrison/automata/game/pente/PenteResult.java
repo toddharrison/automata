@@ -7,5 +7,10 @@ public record PenteResult(
         int gameNumber,
         int rounds,
         PenteState state,
-        PenteBot winner
-) implements Result<PenteConfig, PenteState, PenteView, PenteAction, PenteResult, PenteBot> {}
+        PenteBot winner,
+        boolean wasForfeited
+) implements Result<PenteConfig, PenteState, PenteView, PenteAction, PenteResult, PenteBot> {
+    public PenteResult(final int gameNumber, final int rounds, final PenteState state, final PenteBot winner) {
+        this(gameNumber, rounds, state, winner, false);
+    }
+}

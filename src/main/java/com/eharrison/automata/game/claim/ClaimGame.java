@@ -7,7 +7,10 @@ import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.claim.bot.ClaimBot;
 import lombok.val;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ClaimGame extends Game<ClaimConfig, ClaimState, ClaimView, ClaimAction, ClaimResult, ClaimBot> {
@@ -57,8 +60,6 @@ public class ClaimGame extends Game<ClaimConfig, ClaimState, ClaimView, ClaimAct
         verifiedNewLocations.forEach((bot, loc) -> newBoard[loc.row()][loc.col()] = bot.getId());
         val newState = state.next(verifiedNewLocations, actions, newBoard);
 
-        System.out.println(newState.display());
-
         return new Update<>(newState);
     }
 
@@ -78,10 +79,15 @@ public class ClaimGame extends Game<ClaimConfig, ClaimState, ClaimView, ClaimAct
                 }
             }
         }
-        val winnerId = counts.entrySet().stream()
-                .max(Comparator.comparingInt(Map.Entry::getValue))
+        val maxCount = counts.values().stream().max(Integer::compareTo).orElse(null);
+        if (maxCount == null) {
+            return null;
+        }
+        val winners = counts.entrySet().stream()
+                .filter(e -> e.getValue().equals(maxCount))
                 .map(Map.Entry::getKey)
-                .orElse(null);
+                .toList();
+        val winnerId = winners.size() == 1 ? winners.get(0) : null;
         val winner = state.botLocations().keySet().stream()
                 .filter(bot -> bot.getId().equals(winnerId))
                 .findFirst()

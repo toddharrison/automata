@@ -64,7 +64,8 @@ public class RPSGame extends Game<RPSConfig, RPSState, RPSView, RPSAction, RPSRe
     @Override
     public RPSResult getGameOverResult(final int gameNumber, final RPSState state) {
         val winner = state.bot1Score() > state.bot2Score() ? state.bot1() : state.bot2();
-        return new RPSResult(gameNumber, state.round(), Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score()), state, winner);
+        val scores = Map.of(state.bot1(), state.bot1Score(), state.bot2(), state.bot2Score());
+        return new RPSResult(gameNumber, state.round(), scores, state, winner);
     }
 
 //    @Override

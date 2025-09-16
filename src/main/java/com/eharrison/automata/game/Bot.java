@@ -67,7 +67,6 @@ public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V
      * Given a view of the game state, determine the action the bot chooses to take.
      * @param view The view of the game state.
      * @return The action the bot chooses to take.
-     * {@inheritDoc}
      */
     public abstract A act(final V view);
 

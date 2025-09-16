@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.eharrison"
-version = "1.0.3"
+version = "1.0.4"
 
 java {
     toolchain {
@@ -27,6 +27,14 @@ dependencies {
 
     testImplementation("org.mockito:mockito-core:5.17.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.17.0")
+}
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "com.eharrison.automata.ui.Application"
+        )
+    }
 }
 
 tasks.test {

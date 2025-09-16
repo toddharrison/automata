@@ -70,13 +70,24 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
 
     /**
      * Runs a single game between the given bots.
+     * @param config The configuration for the game, but will exclude match configurations.
+     * @param bots The bots for the game.
+     * @param displayBoard True if the board should be displayed after each update.
+     * @return The result of the game.
+     */
+    public final R runGame(final C config, final List<B> bots, boolean displayBoard) {
+        return run(config, bots, 0, generateStartingState(config, bots), displayBoard);
+    }
+
+    /**
+     * Runs a single game between the given bots.
      * @param config The configuration for the game.
      * @param bots The bots for the game.
      * @param gameNumber The number of the game, starting at 0.
      * @param startingState The initial state of the game.
      * @return The result of the game.
      */
-    public final R run(C config, List<B> bots, int gameNumber, S startingState, boolean displayBoard) {
+    public final R run(final C config, final List<B> bots, final int gameNumber, final S startingState, final boolean displayBoard) {
         var state = startingState;
 
         bots.forEach(b -> b.start(gameNumber));
@@ -109,7 +120,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
      * @param bots The bots for the game.
      * @return The updated state of the game, along with an optional result if the game is over.
      */
-    public abstract Update<C, S, V, A, R, B> updateState(final C config, final int gameNumber, final S state, final List<B> bots);
+    public abstract Update<C, S, V, A, R, B> updateState(C config, int gameNumber, S state, List<B> bots);
 
     /**
      * Determines if the game is over, meaning no more actions can be taken.

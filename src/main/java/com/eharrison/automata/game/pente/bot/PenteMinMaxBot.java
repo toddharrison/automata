@@ -7,13 +7,13 @@ import lombok.val;
 import java.util.Random;
 import java.util.UUID;
 
-public class MinMaxPenteBot extends PenteBot {
-    public static final String TEAM_NAME = "My Team";
+public class PenteMinMaxBot extends PenteBot {
+    public static final String TEAM_NAME = "Default";
     public static final String NAME = "Min-Max Pente Bot";
 
     private static final int[][] DIRECTIONS = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
 
-    public MinMaxPenteBot() {
+    public PenteMinMaxBot() {
         super(TEAM_NAME, NAME);
     }
 
@@ -30,7 +30,7 @@ public class MinMaxPenteBot extends PenteBot {
         val board = view.board();
         val opponentId = view.opponentId();
         val size = board.length;
-        val maxDepth = 2;
+        val maxDepth = 1;
 
         PenteAction bestAction = null;
         int bestScore = Integer.MIN_VALUE;

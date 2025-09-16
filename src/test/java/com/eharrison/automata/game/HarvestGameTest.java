@@ -2,7 +2,7 @@ package com.eharrison.automata.game;
 
 import com.eharrison.automata.game.harvest.HarvestConfig;
 import com.eharrison.automata.game.harvest.HarvestGame;
-import com.eharrison.automata.game.harvest.bot.RandomHarvestBot;
+import com.eharrison.automata.game.harvest.bot.HarvestRandomBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -32,8 +32,8 @@ public class HarvestGameTest {
             val maxRounds = 25;
             val size = 5;
             val config = new HarvestConfig(gamesToPlay, maxRounds, size);
-            val bot1 = new RandomHarvestBot();
-            val bot2 = new RandomHarvestBot();
+            val bot1 = new HarvestRandomBot();
+            val bot2 = new HarvestRandomBot();
 
             // Act
             val result = game.runMatch(config, List.of(bot1, bot2));

@@ -1,6 +1,6 @@
 package com.eharrison.automata.game.claim;
 
-import com.eharrison.automata.Location;
+import com.eharrison.automata.game.Location;
 import com.eharrison.automata.game.View;
 
 import java.util.Map;

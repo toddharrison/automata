@@ -6,11 +6,11 @@ import lombok.val;
 
 import java.util.ArrayList;
 
-public class RandomMoveBot extends PenteBot {
-    public static final String TEAM_NAME = "My Team";
+public class PenteRandomMoveBot extends PenteBot {
+    public static final String TEAM_NAME = "Default";
     public static final String NAME = "Random Pente Bot";
 
-    public RandomMoveBot() {
+    public PenteRandomMoveBot() {
         super(TEAM_NAME, NAME);
     }
 

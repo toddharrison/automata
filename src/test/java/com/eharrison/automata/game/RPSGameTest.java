@@ -3,10 +3,10 @@ package com.eharrison.automata.game;
 import com.eharrison.automata.game.rockpaperscissors.RPSAction;
 import com.eharrison.automata.game.rockpaperscissors.RPSConfig;
 import com.eharrison.automata.game.rockpaperscissors.RPSGame;
-import com.eharrison.automata.game.rockpaperscissors.bot.AlwaysRockBot;
-import com.eharrison.automata.game.rockpaperscissors.bot.AlwaysScissorsBot;
-import com.eharrison.automata.game.rockpaperscissors.bot.ForfeitBot;
+import com.eharrison.automata.game.rockpaperscissors.bot.RPSAlwaysRockBot;
+import com.eharrison.automata.game.rockpaperscissors.bot.RPSAlwaysScissorsBot;
 import com.eharrison.automata.game.rockpaperscissors.bot.RPSBot;
+import com.eharrison.automata.game.rockpaperscissors.bot.RPSForfeitBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,7 +40,7 @@ public class RPSGameTest {
             val gamesToPlay = 5;
             val rounds = 3;
             val config = new RPSConfig(gamesToPlay, rounds);
-            val bot2 = new ForfeitBot();
+            val bot2 = new RPSForfeitBot();
 
             when(bot1.act(any())).thenReturn(RPSAction.ROCK);
 
@@ -59,8 +59,8 @@ public class RPSGameTest {
         val gamesToPlay = 5;
         val rounds = 3;
         val config = new RPSConfig(gamesToPlay, rounds);
-        val bot1 = new AlwaysRockBot();
-        val bot2 = new AlwaysScissorsBot();
+        val bot1 = new RPSAlwaysRockBot();
+        val bot2 = new RPSAlwaysScissorsBot();
 
         // Act
         val result = game.runMatch(config, List.of(bot1, bot2));

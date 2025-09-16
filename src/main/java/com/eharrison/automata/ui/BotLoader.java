@@ -1,6 +1,7 @@
-package com.eharrison.automata;
+package com.eharrison.automata.ui;
 
 import com.eharrison.automata.game.Bot;
+import com.eharrison.automata.util.Files;
 import lombok.val;
 
 import java.io.File;

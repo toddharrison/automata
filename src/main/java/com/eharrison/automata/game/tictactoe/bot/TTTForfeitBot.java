@@ -3,11 +3,11 @@ package com.eharrison.automata.game.tictactoe.bot;
 import com.eharrison.automata.game.tictactoe.TTTAction;
 import com.eharrison.automata.game.tictactoe.TTTView;
 
-public class ForfeitBot extends TTTBot {
+public class TTTForfeitBot extends TTTBot {
     public static final String TEAM_NAME = "Forfeit";
     public static final String NAME = "Forfeit Tic-Tac-Toe Bot";
 
-    public ForfeitBot() {
+    public TTTForfeitBot() {
         super(TEAM_NAME, NAME);
     }
 

@@ -63,7 +63,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
         bots.forEach(b -> b.init(config));
 
         val results = IntStream.range(0, config.gamesInMatch())
-                .mapToObj(i -> run(config, bots, i, generateStartingState(config, bots)))
+                .mapToObj(i -> run(config, bots, i, generateStartingState(config, bots), false))
                 .toList();
         return combineIntoMatchResults(results);
     }
@@ -76,7 +76,7 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
      * @param startingState The initial state of the game.
      * @return The result of the game.
      */
-    public final R run(C config, List<B> bots, int gameNumber, S startingState) {
+    public final R run(C config, List<B> bots, int gameNumber, S startingState, boolean displayBoard) {
         var state = startingState;
 
         bots.forEach(b -> b.start(gameNumber));
@@ -84,6 +84,11 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
         while (!isGameOver(config, state)) {
             val update = updateState(config, gameNumber, state, bots);
             state = update.state();
+
+            if (displayBoard) {
+                System.out.println(state.display());
+            }
+
             if (update.result().isPresent()) {
                 // Game complete before isGameOver()
                 val result = update.result().get();
@@ -105,15 +110,6 @@ public abstract class Game<C extends Config, S extends State<C, S, V, A, R, B>, 
      * @return The updated state of the game, along with an optional result if the game is over.
      */
     public abstract Update<C, S, V, A, R, B> updateState(final C config, final int gameNumber, final S state, final List<B> bots);
-
-//    /**
-//     * Determines if the given action is valid for the given state.
-//     * @param state The current state of the game.
-//     * @param bot The bot making the action.
-//     * @param action The action to validate.
-//     * @return True if the action is valid, false otherwise.
-//     */
-//    public abstract boolean isValidAction(S state, B bot, A action);
 
     /**
      * Determines if the game is over, meaning no more actions can be taken.

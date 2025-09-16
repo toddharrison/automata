@@ -2,7 +2,7 @@ package com.eharrison.automata.game;
 
 import com.eharrison.automata.game.claim.ClaimConfig;
 import com.eharrison.automata.game.claim.ClaimGame;
-import com.eharrison.automata.game.claim.bot.RandomClaimBot;
+import com.eharrison.automata.game.claim.bot.ClaimRandomBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -32,8 +32,8 @@ public class ClaimGameTest {
             val maxRounds = 25;
             val size = 5;
             val config = new ClaimConfig(gamesToPlay, maxRounds, size);
-            val bot1 = new RandomClaimBot();
-            val bot2 = new RandomClaimBot();
+            val bot1 = new ClaimRandomBot();
+            val bot2 = new ClaimRandomBot();
 
             // Act
             val result = game.runMatch(config, List.of(bot1, bot2));

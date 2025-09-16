@@ -1,8 +1,8 @@
 package com.eharrison.automata.game.tictactoe;
 
-import com.eharrison.automata.Arrays;
 import com.eharrison.automata.game.State;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
+import com.eharrison.automata.util.Arrays;
 import lombok.val;
 
 import java.util.UUID;

@@ -2,9 +2,9 @@ package com.eharrison.automata.game;
 
 import com.eharrison.automata.game.tictactoe.TTTConfig;
 import com.eharrison.automata.game.tictactoe.TTTGame;
-import com.eharrison.automata.game.tictactoe.bot.ForfeitBot;
-import com.eharrison.automata.game.tictactoe.bot.RandomMoveBot;
 import com.eharrison.automata.game.tictactoe.bot.TTTBot;
+import com.eharrison.automata.game.tictactoe.bot.TTTForfeitBot;
+import com.eharrison.automata.game.tictactoe.bot.TTTRandomMoveBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -40,7 +40,7 @@ public class TTTGameTest {
             // Arrange
             val gamesToPlay = 5;
             val config = new TTTConfig(gamesToPlay);
-            val bot2 = new ForfeitBot();
+            val bot2 = new TTTForfeitBot();
 
             when(random.nextBoolean()).thenReturn(false);
 
@@ -59,7 +59,7 @@ public class TTTGameTest {
         // Arrange
         val gamesToPlay = 5;
         val config = new TTTConfig(gamesToPlay);
-        val bots = List.<TTTBot>of(new RandomMoveBot(), new RandomMoveBot());
+        val bots = List.<TTTBot>of(new TTTRandomMoveBot(), new TTTRandomMoveBot());
 
         when(random.nextBoolean()).thenReturn(true);
 

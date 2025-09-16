@@ -4,10 +4,10 @@ import com.eharrison.automata.game.pente.PenteAction;
 import com.eharrison.automata.game.pente.PenteConfig;
 import com.eharrison.automata.game.pente.PenteGame;
 import com.eharrison.automata.game.pente.PenteState;
-import com.eharrison.automata.game.pente.bot.ForfeitBot;
-import com.eharrison.automata.game.pente.bot.MinMaxPenteBot;
 import com.eharrison.automata.game.pente.bot.PenteBot;
-import com.eharrison.automata.game.pente.bot.RandomMoveBot;
+import com.eharrison.automata.game.pente.bot.PenteForfeitBot;
+import com.eharrison.automata.game.pente.bot.PenteMinMaxBot;
+import com.eharrison.automata.game.pente.bot.PenteRandomMoveBot;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -63,7 +63,7 @@ public class PenteGameTest {
             when(action.col()).thenReturn(0);
 
             // Act
-            val result = game.run(config, List.of(bot1, bot2), 0, state);
+            val result = game.run(config, List.of(bot1, bot2), 0, state, false);
 
             // Assert
             assertEquals(0, result.rounds());
@@ -685,7 +685,7 @@ public class PenteGameTest {
             // Arrange
             val gamesToPlay = 5;
             val config = new PenteConfig(gamesToPlay);
-            val bot2 = new ForfeitBot();
+            val bot2 = new PenteForfeitBot();
 
             when(random.nextBoolean()).thenReturn(false);
 
@@ -706,8 +706,8 @@ public class PenteGameTest {
             // Arrange
             val gamesToPlay = 5;
             val config = new PenteConfig(gamesToPlay);
-            val bot1 = new RandomMoveBot();
-            val bot2 = new MinMaxPenteBot();
+            val bot1 = new PenteRandomMoveBot();
+            val bot2 = new PenteMinMaxBot();
 
             when(random.nextBoolean()).thenReturn(false);
 

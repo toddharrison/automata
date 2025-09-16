@@ -1,9 +1,9 @@
 package com.eharrison.automata.game.claim;
 
-import com.eharrison.automata.Arrays;
-import com.eharrison.automata.Location;
+import com.eharrison.automata.game.Location;
 import com.eharrison.automata.game.State;
 import com.eharrison.automata.game.claim.bot.ClaimBot;
+import com.eharrison.automata.util.Arrays;
 import lombok.val;
 
 import java.util.HashMap;

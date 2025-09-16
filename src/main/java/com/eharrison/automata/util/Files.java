@@ -1,4 +1,4 @@
-package com.eharrison.automata;
+package com.eharrison.automata.util;
 
 import lombok.experimental.UtilityClass;
 

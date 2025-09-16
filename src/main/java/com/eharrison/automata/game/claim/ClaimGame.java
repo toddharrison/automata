@@ -1,10 +1,10 @@
 package com.eharrison.automata.game.claim;
 
-import com.eharrison.automata.Arrays;
-import com.eharrison.automata.Location;
 import com.eharrison.automata.game.Game;
+import com.eharrison.automata.game.Location;
 import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.claim.bot.ClaimBot;
+import com.eharrison.automata.util.Arrays;
 import lombok.val;
 
 import java.util.HashMap;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 
 public class ClaimGame extends Game<ClaimConfig, ClaimState, ClaimView, ClaimAction, ClaimResult, ClaimBot> {
     public ClaimGame() {
-        super("Claim Jumper");
+        super("Claim");
     }
 
     @Override
     public void verifyRequirements(final ClaimConfig config, final List<ClaimBot> bots) {
-        require(config.gamesInMatch() > 0, "Claim Jumper requires at least 1 game in match.");
-        require(bots.size() >= 2 && bots.size() <= 4, "Claim Jumper requires 2 to 4 bots.");
-        require(bots.stream().distinct().count() == bots.size(), "Claim Jumper requires different bots.");
+        require(config.gamesInMatch() > 0, "Claim requires at least 1 game in match.");
+        require(bots.size() >= 2 && bots.size() <= 4, "Claim requires 2 to 4 bots.");
+        require(bots.stream().distinct().count() == bots.size(), "Claim requires different bots.");
     }
 
     @Override

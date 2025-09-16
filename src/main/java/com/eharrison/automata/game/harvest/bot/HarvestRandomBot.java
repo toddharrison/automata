@@ -3,13 +3,13 @@ package com.eharrison.automata.game.harvest.bot;
 import com.eharrison.automata.game.harvest.HarvestAction;
 import com.eharrison.automata.game.harvest.HarvestView;
 
-public class DoNothingHarvestBot extends HarvestBot {
-    public DoNothingHarvestBot() {
-        super("My Team", "Do Nothing Harvest Bot");
+public class HarvestRandomBot extends HarvestBot {
+    public HarvestRandomBot() {
+        super("Default", "Random Claim Bot");
     }
 
     @Override
     public HarvestAction act(final HarvestView view) {
-        return HarvestAction.HOLD_POSITION;
+        return HarvestAction.values()[(int) (Math.random() * HarvestAction.values().length)];
     }
 }

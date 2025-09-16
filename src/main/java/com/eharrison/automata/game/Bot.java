@@ -15,7 +15,7 @@ import java.util.UUID;
 public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V extends View, A extends Action, R extends Result<C, S, V, A, R, B>, B extends Bot<C, S, V, A, R, B>> implements Player {
     private final UUID id = UUID.randomUUID();
     private final String teamName;
-    private final String name;
+    private final String type;
 
     /**
      * Creates a new bot.
@@ -24,7 +24,7 @@ public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V
      */
     public Bot(final String teamName, final String type) {
         this.teamName = teamName;
-        this.name = type;
+        this.type = type;
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V
      * @return The type of this bot.
      */
     public final String getType() {
-        return name;
+        return type;
     }
 
     /**
@@ -78,6 +78,6 @@ public abstract class Bot<C extends Config, S extends State<C, S, V, A, R, B>, V
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", name, teamName);
+        return String.format("%s (%s)", type, teamName);
     }
 }

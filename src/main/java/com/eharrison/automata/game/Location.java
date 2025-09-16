@@ -1,4 +1,4 @@
-package com.eharrison.automata;
+package com.eharrison.automata.game;
 
 public record Location(
         int row,

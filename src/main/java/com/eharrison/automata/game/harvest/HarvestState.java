@@ -1,9 +1,9 @@
 package com.eharrison.automata.game.harvest;
 
-import com.eharrison.automata.Arrays;
-import com.eharrison.automata.Location;
+import com.eharrison.automata.game.Location;
 import com.eharrison.automata.game.State;
 import com.eharrison.automata.game.harvest.bot.HarvestBot;
+import com.eharrison.automata.util.Arrays;
 import lombok.val;
 
 import java.util.HashMap;

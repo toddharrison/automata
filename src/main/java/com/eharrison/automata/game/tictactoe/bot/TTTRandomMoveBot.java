@@ -6,11 +6,11 @@ import lombok.val;
 
 import java.util.ArrayList;
 
-public class RandomMoveBot extends TTTBot {
-    public static final String TEAM_NAME = "My Team";
+public class TTTRandomMoveBot extends TTTBot {
+    public static final String TEAM_NAME = "Default";
     public static final String NAME = "Random Tic-Tac-Toe Bot";
 
-    public RandomMoveBot() {
+    public TTTRandomMoveBot() {
         super(TEAM_NAME, NAME);
     }
 

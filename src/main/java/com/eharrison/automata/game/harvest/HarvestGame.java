@@ -1,10 +1,10 @@
 package com.eharrison.automata.game.harvest;
 
-import com.eharrison.automata.Arrays;
-import com.eharrison.automata.Location;
 import com.eharrison.automata.game.Game;
+import com.eharrison.automata.game.Location;
 import com.eharrison.automata.game.Update;
 import com.eharrison.automata.game.harvest.bot.HarvestBot;
+import com.eharrison.automata.util.Arrays;
 import lombok.val;
 
 import java.util.HashMap;
@@ -64,7 +64,7 @@ public class HarvestGame extends Game<HarvestConfig, HarvestState, HarvestView, 
         });
         val newState = state.next(verifiedNewLocations, actions, newScores, newBoard);
 
-        System.out.println(newState.display());
+//        System.out.println(newState.display());
 
         return new Update<>(newState);
     }
@@ -91,8 +91,8 @@ public class HarvestGame extends Game<HarvestConfig, HarvestState, HarvestView, 
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
-        System.out.println("Final Scores:");
-        state.scores().forEach((bot, score) -> System.out.println("Bot "+ bot.getId() + ": " + score));
+//        System.out.println("Final Scores:");
+//        state.scores().forEach((bot, score) -> System.out.println("Bot "+ bot.getId() + ": " + score));
 
         return new HarvestResult(gameNumber, state, winner);
     }

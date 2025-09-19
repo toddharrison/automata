@@ -30,7 +30,7 @@ public class BotLoader {
         Files.getFilesInDirectory(dir, ".jar")
                 .map(Files::filesToUrls)
                 .ifPresent(urls -> {
-                    try (val classLoader = new URLClassLoader(urls, Bot.class.getClassLoader())) {
+                    try (val classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader())) {
                         ServiceLoader.load(Bot.class, classLoader).stream()
                                 .map(ServiceLoader.Provider::get)
                                 .forEach(this::registerBot);
